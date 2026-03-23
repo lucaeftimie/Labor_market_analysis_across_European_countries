@@ -1,4 +1,5 @@
-add_region_code <- function(df, region_code){
-  df$region_code <- region_code
+add_region_code <- function(df, reg_id){
+  df$region_id <- reg_id
   return(df)
+  
 }
