@@ -1,0 +1,13 @@
+Studiaza aceste cursuri si recomanda cum pot sa fac analiza de regresie. 
+Eu m-am gandit sa fac urmatoarele:
+0. Vreau sa formulez ipoteza analizei, in ansamblu
+1. sa testez ipotezele modelului - normalitatea erorilor, corelatia erorilor si homoscedasticitatea
+2. sa testez multicoliniaritatea
+3. sa estimez parametrii
+4. sa evaluez coeficientii
+5. sa evaluez modelul - prin R2 si AIC si BIC
+6. sa fac prognoza pe interval de predictie
+
+De asemenea, as vrea sa folosesc ln(salariul) pentru interpretarea corecta a datelor
+
+
