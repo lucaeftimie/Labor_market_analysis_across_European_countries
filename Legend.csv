@@ -1,8 +1,4 @@
-﻿Home->Database->Detailed Datasets,,,
-"countries: all
-time 2010-2024",,,
-,,,
-Cod eurostat,Denumire R,Traducere în română,Denumire Eurostat
+﻿Cod eurostat,Denumire R,Traducere în română,Denumire Eurostat
 edat_lfse_03_max_liceu,abandon_scolar_timpuriu,"Ponderea tinerilor de 18-24 ani cu cel mult studii gimnaziale, % din total",Population in private households by educational attainment level
 htec_emp_reg2,angajati_tech,"Ponderea persoanelor ocupate în domenii de tehnologie și cunoaștere, % din totalul ocupării",Employed persons in technology and knowledge-intensive sectors
 rd_e_gerdtot,cheltuieli_cd,Cheltuieli totale cu cercetare și dezvoltare (% din PIB),GERD by sector of performance
@@ -16,6 +12,9 @@ lfsa_ergan,rata_ocupare,"Rata de ocupare a populației de 20-64 ani, % din total
 une_rt_a,rata_somaj,Rata șomajului în rândul populației de 20–64 ani (% din populația activă),Unemployment by sex and age - annual data
 yth_empl_090,somaj_tineri,,Youth unemployment by educational attainment level
 earn_nt_net,venit_anual,"Venitul net anual al unui singur adult fără copii, la 100% din salariul mediu (EUR)",Annual net earnings
+,,,
+,,,
+,,,
 ,,,
 ,,,
 ,,,

@@ -1,0 +1,13 @@
+"indicator","N","Mean","Median","St.Dev","Min","Max","CV"
+"anual_revenue",360,21598.278,19552.445,12323.05,3872.44,50409.61,57.1
+"continuous_development_of_employees",360,12.42,10.25,8.409,0.9,38.8,67.7
+"early_school_leaving",360,27.762,27.5,7.077,7.7,47.3,25.5
+"employment",360,72.573,73.55,6.334,52.9,83.5,8.7
+"employment_superior_education",360,2617.901,1227.95,3265.432,81.8,13598.2,124.7
+"labour_productivity",360,1.207,1,2.229,-6.8,8.9,184.7
+"net_migration",360,3.161,2.7,6.209,-25.2,30.9,196.4
+"r_n_d_expenses_relative_to_GDP",360,1.776,1.55,0.876,0.38,3.71,49.3
+"rate_of_tech_employment",360,4.339,4.3,1.146,1.7,7,26.4
+"rate_of_temporary_contracts",360,9.262,8,5.763,0.8,22.8,62.2
+"tertiary_education",360,40.206,41,9.086,20.7,63.8,22.6
+"unemployment_rate",360,7.872,6.8,4.538,2,27.6,57.6

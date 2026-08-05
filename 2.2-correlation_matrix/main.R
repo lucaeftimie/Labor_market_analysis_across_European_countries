@@ -1,34 +1,37 @@
-source("./functii/librarii.R")
-source("./functii/citire_fisiere.R")
-date  <- citire_fisiere("./date")
-an_analiza <- "2024"
+source("./modules/libraries.R")
+source("./modules/import_data.R")
+dfs  <- import_data("./data/csv/", "./../1-preprocessing/data/output/")
+
+selected_year <- "2024"
 for(i in 1:length(date)){
-  date[[i]] <- date[[i]] %>% filter(an == an_analiza)
+  dfs[[i]] <- dfs[[i]] %>% filter(year == selected_year)
 }
-df_all <- bind_rows(date)
+
+df_all <- bind_rows(dfs)
 df_wide <- df_all %>%
-  pivot_wider(names_from = indicator, values_from = valoare) %>%
-  select(-cod_tara, -an)
+  pivot_wider(names_from = indicator, values_from = value) %>%
+  select(-country_code, -year)
+
 cor_matrix <- cor(df_wide, use = "pairwise.complete.obs", method = "pearson")
 
 
 short_names <- c(
-  "Abandon Scolar",
-  "Angajati Tech",
-  "Chelt. C&D / PIB",
-  "Edu. Tertiara",
-  "Formare Continua",
-  "Migratie Neta",
-  "Ocp. Edu. Sup.",
-  "Prod. Muncii",
-  "Contracte Temp.",
-  "Rata Ocupare",
-  "Rata Somaj",
-  "Venit Anual"
+  "Early Sch. Leaving",
+  "Rate Tech Empl.",
+  "R&D Expens. Rel. GDP",
+  "Tertiary Educ.",
+  "Cont. Develop. Of Empl.",
+  "Net Migration",
+  "Empl. Sup. Ed.",
+  "Labour Produc.",
+  "Rate Temp. Contract",
+  "Rate Of Empl.",
+  "Rate Of Unempl.",
+  "Annual Revenue"
 )
 
-colnames(cor_matrix) <- rownames(cor_matrix) <- short_names
-
+rownames(cor_matrix) <- short_names
+colnames(cor_matrix) <- short_names
 
 ggcorrplot(cor_matrix,
            method = "square",
@@ -40,7 +43,7 @@ ggcorrplot(cor_matrix,
            tl.col = "grey20",
            colors = c("#C1392B", "#FFFFFF", "#2471A3"),
            outline.color = "grey70",
-           title = str_glue("Corelații între indicatori (", an_analiza, ")"),
+           title = str_glue("Correlation matrix (", selected_year, ")"),
            ggtheme = theme_minimal(base_size = 12)
 ) +
   theme(
