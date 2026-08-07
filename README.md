@@ -1,12 +1,12 @@
 # Legend of the datasets
 
 
-<img width="1400" height="408" alt="image" src="https://github.com/user-attachments/assets/8ce077a0-638b-4459-b24b-b8cf775a4489" />
+<img width="1930" height="562" alt="image" src="https://github.com/user-attachments/assets/e7ca700b-6c3d-4559-b0a0-d0b473487a2e" />
 
-
-
-
-
+</br>
+</br>
+</br>
+</br>
 
 # Sections
 
