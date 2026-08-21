@@ -1,107 +1,89 @@
-# Legend of the datasets
+# Labor Market Analysis Across European Countries
 
+This repository contains the R code used to analyze labor market indicators (e.g. unemployment, wages, and related economic variables) across European countries. The analysis moves through four stages, each in its own numbered folder — data is cleaned, explored, reduced to key patterns via clustering, and finally modeled with time-series regression per country.
 
-<img width="1930" height="562" alt="image" src="https://github.com/user-attachments/assets/e7ca700b-6c3d-4559-b0a0-d0b473487a2e" />
+## How the project is organized
 
-</br>
-</br>
-</br>
-</br>
-
-# Sections
-
-
-### 1 - Preprocessing: 
-The purpose of this section is to clean the data.
-
-**Processing csv:**  
-&emsp; Function which reads the csv files containing the data about economic indicators.  
-&emsp; The function selects the columns "country_id" "year" and "value" from each file.
-
+The code is meant to be run in order, since each stage builds on the output of the one before it:
 
 ```
-processing_csv <- function(curr_dir)
-return value = list of dataframes
+1-preprocessing/            → clean and reshape the raw data
+2.1-descriptive_statistics/ → import data and compute summary statistics
+2.2-correlation_matrix/     → measure relationships between indicators
+3-data_analysis/            → dimensionality reduction and clustering
+4-linear_regression/        → per-country time-series regression models
+Legend.csv                  → lookup table explaining what each indicator code means
 ```
 
+If you're new to the project, start by opening `Legend.csv` to understand what the indicator codes (used throughout the code and plots) actually represent, then work through the folders in the order above.
 
-**Common country codes:**  
-&emsp; Function which recursively identifies the common country codes between two or more dataframes.  
-&emsp; Exit condition: if (index > length(dfs))
+---
 
+## 1. Preprocessing
 
-```
-common_country_codes <- function(dfs, index = 1, common = NULL)
-return value = common_country_codes(dfs, index + 1, common)
-```
+**Goal:** turn the raw indicator files into clean, usable dataframes.
 
+- **`processing_csv(curr_dir)`**
+  Reads every CSV file in a given directory (each file represents one economic indicator) and keeps only the three columns that matter for the analysis: `country_id`, `year`, and `value`.
+  → Returns a list of cleaned dataframes, one per indicator.
 
-### 2.1 - Descriptive statistics
+- **`common_country_codes(dfs, index = 1, common = NULL)`**
+  Since not every country reports every indicator, this function figures out which country codes are actually present in *all* the dataframes, so later steps only compare countries with complete data. It works recursively, checking one dataframe at a time (`index`) and narrowing down the running list of shared codes (`common`) until it has gone through the whole list.
 
-The purpose of this section is to import the data and calculate the statistical indicators. 
+---
 
+## 2.1 Descriptive Statistics
 
-<img width="896" height="331" alt="image" src="https://github.com/user-attachments/assets/e03db656-d164-4318-9ff0-0de78c10eb37" />
+**Goal:** load the cleaned data into R and compute basic statistical summaries (mean, spread, etc.) for each indicator.
 
+- **`import_data(current_folder, upstream)`**
+  Loads the preprocessed data into the R session as tibbles, ready for analysis. Because this can overwrite existing files, it interactively asks for confirmation in the terminal before: clearing out the destination folder, copying the data over from the previous stage, and finally loading it into R.
+  → Returns a list of dataframes.
 
-**Import data:**    
-&emsp; Function which imports the data into the R environment from a specific folder  
-&emsp; The function asks, in the terminal, for deleting the contents of the destination folder, for copying the the data from the upstream folder
-and for loading the dataframes into R as tibbles.
+---
 
+## 2.2 Correlation Matrix
 
-```
-import_data <- function(current_folder, upstream)
-return value = list of dataframes
-```
+**Goal:** quantify how strongly each labor-market indicator relates to the others (e.g. does higher GDP per capita correlate with lower unemployment?). This step produces the correlation matrix used to guide which indicators are worth carrying into the next stage.
 
+---
 
-### 2.2 - Correlation matrix
-The purpose of this section is to calculate the correlation matrix between the indicators.
+## 3. Dimensionality Reduction and Clustering
 
+**Goal:** the raw dataset has many overlapping indicators, so this step distills them into a smaller number of underlying components (via dimensionality reduction) and then groups countries into clusters based on those components — countries with similar labor-market profiles end up in the same cluster.
 
-<img width="800" height="665" alt="image" src="https://github.com/user-attachments/assets/c8d33aec-7850-4f00-adc4-cbdf9cfdb70e" />
+---
 
+## 4. Linear Regression
 
-### 3 - Dimensionality reduction and clustering
-The purpose of this section is to synthesize the information in the datasets and group the countries based on the components discovered in the dimensionality reduction algorithm.
+**Goal:** build a time-series regression model *for each country individually*, to test how labor-market indicators evolve and relate to one another over time within that country.
 
-</br>
-</br>
-</br>
-</br>
+- **`run_ts_ols(cty_code)`**
+  Fits an OLS (ordinary least squares) time-series regression for a single country, then runs a full battery of diagnostic checks on it — the classical regression assumptions, plus stationarity and cointegration tests (relevant for time-series data specifically). This function is applied once per country to build up the full set of country-level models.
 
-<img width="900" height="564" alt="image" src="https://github.com/user-attachments/assets/016d8ba6-730d-4f01-9f20-1387589eed8c" />
+  Returns a list of results, where each entry is itself a dataframe:
 
-</br>
-</br>
-</br>
-</br>
+  | Element | What it contains |
+  |---|---|
+  | `model` | The fitted regression model |
+  | `stationarity` | Stationarity test results (checks if the data's statistical properties are stable over time) |
+  | `johansen` | Johansen cointegration test results (checks for long-run equilibrium relationships between variables) |
+  | `coef` | Estimated regression coefficients |
+  | `global_test` | Overall model significance test |
+  | `normality` | Test for whether residuals are normally distributed |
+  | `autocorrelation` | Test for correlation between residuals across time |
+  | `homoscedasticity` | Test for constant variance of residuals |
+  | `multicolinearity` | Test for excessive correlation between predictor variables |
+  | `fitted` | The model's fitted (predicted) values |
+  | `forecast` | Forecasted future values |
 
-<img width="900" height="564" alt="image" src="https://github.com/user-attachments/assets/7ebd2a23-fd3e-43bb-9c64-b39ea56ee308" />
+---
 
+## Requirements
 
-### 4 - Linear Regression
-The purpose of these modules is to create the linear regression model and to apply the hypothesis testing on the model.  
-The function is dedicated for one country at a time. 
-Then the function is applied for each indicator or country respectively.  
+This project is written in **R**. You'll need R installed along with the packages used for data manipulation (e.g. `dplyr`/`tibble`), time-series analysis, and regression diagnostics referenced in the `4-linear_regression` scripts.
 
-**Regression model**  
-Function which fits the linear regression model and applies the hypothesis testing for the classical assumptions of the model alongside stationarity and cointegration
-```
-run_ts_ols <- function(cty_code)
-return value = list of dfs which are named in accordance with the data in them:
-list(
-    model              
-    stationarity       
-    johansen          
-    coef               
-    global_test        
-    normality          
-    autocorrelation   
-    homoscedasticity   
-    multicolinearity  
-    fitted             
-    forecast           
-  )
-```
+## Notes
+
+- `Legend.csv` is the reference for what each indicator code in the plots and dataframes means — check it first if a variable name is unclear.
+- Because `import_data()` deletes and overwrites files interactively, run it from a terminal (not silently) so you can respond to its prompts.
